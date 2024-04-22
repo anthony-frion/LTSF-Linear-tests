@@ -107,3 +107,6 @@ def test_params_flop(model,x_shape):
         # print('Params:' + params)
         print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
         print('{:<30}  {:<8}'.format('Number of parameters: ', params))
+
+def RegressionNLLLoss(mu, sigma, target):
+    return torch.mean(torch.log(sigma **2) / 2 + ((target - mu) **2) / (2 * (sigma **2)))
