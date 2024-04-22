@@ -70,9 +70,28 @@ class Exp_Main(Exp_Basic):
                 # decoder input
                 dec_inp = torch.zeros_like(batch_y[:, -self.args.pred_len:, :]).float()
                 dec_inp = torch.cat([batch_y[:, :self.args.label_len, :], dec_inp], dim=1).float().to(self.device)
-                # encoder - decoder
-                if self.args.use_amp:
-                    with torch.cuda.amp.autocast():
+                
+                if 'Stochastic' in self.args.model:
+                    mu, std = self.model(batch_x)
+                    f_dim = -1 if self.args.features == 'MS' else 0
+                    mu, std = mu[:, -self.args.pred_len:, f_dim:], std[:, -self.args.pred_len:, f_dim:]
+
+                    batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
+                    true = batch_y.detach().cpu()
+                    loss = criterion(mu, std, true)
+                    total_loss.append(loss)
+                else:
+                    if self.args.use_amp:
+                        with torch.cuda.amp.autocast():
+                            if 'Linear' in self.args.model:
+                                outputs = self.model(batch_x)
+                            else:
+                                if self.args.output_attention:
+                                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
+                                else:
+                                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
+                    else:
+                        # encoder - decoder
                         if 'Linear' in self.args.model:
                             outputs = self.model(batch_x)
                         else:
@@ -80,24 +99,16 @@ class Exp_Main(Exp_Basic):
                                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
                             else:
                                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-                else:
-                    if 'Linear' in self.args.model:
-                        outputs = self.model(batch_x)
-                    else:
-                        if self.args.output_attention:
-                            outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
-                        else:
-                            outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-                f_dim = -1 if self.args.features == 'MS' else 0
-                outputs = outputs[:, -self.args.pred_len:, f_dim:]
-                batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
-
-                pred = outputs.detach().cpu()
-                true = batch_y.detach().cpu()
-
-                loss = criterion(pred, true)
-
-                total_loss.append(loss)
+                    f_dim = -1 if self.args.features == 'MS' else 0
+                    outputs = outputs[:, -self.args.pred_len:, f_dim:]
+                    batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
+    
+                    pred = outputs.detach().cpu()
+                    true = batch_y.detach().cpu()
+    
+                    loss = criterion(pred, true)
+    
+                    total_loss.append(loss)
         total_loss = np.average(total_loss)
         self.model.train()
         return total_loss
