@@ -1,7 +1,7 @@
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from models import Informer, Autoformer, Transformer, DLinear, Linear, NLinear, DLinear_Stochastic, Linear_Stochastic, NLinear_Stochastic
-from utils.tools import EarlyStopping, adjust_learning_rate, visual, test_params_flop
+from utils.tools import EarlyStopping, adjust_learning_rate, visual, test_params_flop, RegressionNLLLoss
 from utils.metrics import metric
 
 import numpy as np
