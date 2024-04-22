@@ -51,7 +51,7 @@ class Exp_Main(Exp_Basic):
 
     def _select_criterion(self):
         if 'Stochastic' in self.args.model:
-            criterion = RegressionNLLLoss
+            criterion = GaussianNLLLoss()
         else:
             criterion = nn.MSELoss()
         return criterion
