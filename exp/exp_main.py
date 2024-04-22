@@ -79,7 +79,8 @@ class Exp_Main(Exp_Basic):
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
                     true = batch_y.detach().cpu()
-                    loss = criterion(mu, true, std **2)
+                    #loss = criterion(mu, true, std **2)
+                    loss = nn.MSELoss()(mu, true)
                     total_loss.append(loss)
                 else:
                     if self.args.use_amp:
@@ -161,7 +162,8 @@ class Exp_Main(Exp_Basic):
                     std = std[:, -self.args.pred_len:, f_dim:]
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
-                    loss = criterion(mu, batch_y, std **2)
+                    #loss = criterion(mu, batch_y, std **2)
+                    loss = nn.MSELoss()(mu, batch_y)
                     train_loss.append(loss.item())
                 else:
                     # encoder - decoder
