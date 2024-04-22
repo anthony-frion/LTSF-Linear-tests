@@ -50,7 +50,10 @@ class Exp_Main(Exp_Basic):
         return model_optim
 
     def _select_criterion(self):
-        criterion = nn.MSELoss()
+        if 'Stochastic' in self.args.model:
+            criterion = RegressionNLLLoss
+        else:
+            criterion = nn.MSELoss()
         return criterion
 
     def vali(self, vali_data, vali_loader, criterion):
