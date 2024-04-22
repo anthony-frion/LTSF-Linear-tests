@@ -74,7 +74,7 @@ class Exp_Main(Exp_Basic):
                 if 'Stochastic' in self.args.model:
                     mu, std = self.model(batch_x)
                     f_dim = -1 if self.args.features == 'MS' else 0
-                    mu, = mu[:, -self.args.pred_len:, f_dim:].detach().cpu()
+                    mu = mu[:, -self.args.pred_len:, f_dim:].detach().cpu()
                     std = std[:, -self.args.pred_len:, f_dim:].detach().cpu()
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
@@ -157,7 +157,7 @@ class Exp_Main(Exp_Basic):
                 if 'Stochastic' in self.args.model:
                     mu, std = self.model(batch_x)
                     f_dim = -1 if self.args.features == 'MS' else 0
-                    mu, = mu[:, -self.args.pred_len:, f_dim:].detach().cpu()
+                    mu = mu[:, -self.args.pred_len:, f_dim:].detach().cpu()
                     std = std[:, -self.args.pred_len:, f_dim:].detach().cpu()
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
@@ -267,7 +267,7 @@ class Exp_Main(Exp_Basic):
                 if 'Stochastic' in self.args.model:
                     mu, std = self.model(batch_x)
                     f_dim = -1 if self.args.features == 'MS' else 0
-                    mu, = mu[:, -self.args.pred_len:, f_dim:].detach().cpu()
+                    mu = mu[:, -self.args.pred_len:, f_dim:].detach().cpu()
                     std = std[:, -self.args.pred_len:, f_dim:].detach().cpu()
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
