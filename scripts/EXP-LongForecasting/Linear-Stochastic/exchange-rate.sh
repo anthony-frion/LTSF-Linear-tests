@@ -7,7 +7,7 @@ if [ ! -d "./logs/LongForecasting" ]; then
     mkdir ./logs/LongForecasting
 fi
 seq_len=336
-model_name=DLinear-Stochastic
+model_name=DLinear_Stochastic
 
 python -u run_longExp.py \
   --is_training 1 \
