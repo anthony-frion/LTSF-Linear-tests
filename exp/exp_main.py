@@ -157,12 +157,11 @@ class Exp_Main(Exp_Basic):
                 if 'Stochastic' in self.args.model:
                     mu, std = self.model(batch_x)
                     f_dim = -1 if self.args.features == 'MS' else 0
-                    mu = mu[:, -self.args.pred_len:, f_dim:].detach().cpu()
-                    std = std[:, -self.args.pred_len:, f_dim:].detach().cpu()
+                    mu = mu[:, -self.args.pred_len:, f_dim:]
+                    std = std[:, -self.args.pred_len:, f_dim:]
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
-                    true = batch_y.detach().cpu()
-                    loss = criterion(mu, std, true)
+                    loss = criterion(mu, std, batch_y)
                     train_loss.append(loss.item())
                 else:
                     # encoder - decoder
