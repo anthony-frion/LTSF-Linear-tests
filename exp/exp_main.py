@@ -163,7 +163,7 @@ class Exp_Main(Exp_Basic):
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
                     #loss = criterion(mu, batch_y, std **2)
-                    loss = nn.MSELoss()(mu, true)
+                    loss = nn.MSELoss()(mu, batch_y)
                     train_loss.append(loss.item())
                 else:
                     # encoder - decoder
