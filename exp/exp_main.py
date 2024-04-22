@@ -31,6 +31,9 @@ class Exp_Main(Exp_Basic):
             'DLinear': DLinear,
             'NLinear': NLinear,
             'Linear': Linear,
+            'DLinear-Stochastic': DLinear-Stochastic,
+            'NLinear-Stochastic': NLinear-Stochastic,
+            'Linear-Stochastic': Linear-Stochastic,
         }
         model = model_dict[self.args.model].Model(self.args).float()
 
