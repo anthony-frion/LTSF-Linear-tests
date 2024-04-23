@@ -72,15 +72,15 @@ class Exp_Main(Exp_Basic):
                 dec_inp = torch.cat([batch_y[:, :self.args.label_len, :], dec_inp], dim=1).float().to(self.device)
                 
                 if 'Stochastic' in self.args.model:
-                    mu, std = self.model(batch_x)
+                    mu, var = self.model(batch_x)
                     f_dim = -1 if self.args.features == 'MS' else 0
                     mu = mu[:, -self.args.pred_len:, f_dim:].detach().cpu()
-                    std = std[:, -self.args.pred_len:, f_dim:].detach().cpu()
+                    var = var[:, -self.args.pred_len:, f_dim:].detach().cpu()
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
                     true = batch_y.detach().cpu()
-                    #loss = criterion(mu, true, std **2)
-                    loss = nn.MSELoss()(mu, true)
+                    loss = criterion(mu, true, var)
+                    #loss = nn.MSELoss()(mu, true)
                     total_loss.append(loss)
                 else:
                     if self.args.use_amp:
@@ -156,14 +156,14 @@ class Exp_Main(Exp_Basic):
                 dec_inp = torch.cat([batch_y[:, :self.args.label_len, :], dec_inp], dim=1).float().to(self.device)
 
                 if 'Stochastic' in self.args.model:
-                    mu, std = self.model(batch_x)
+                    mu, var = self.model(batch_x)
                     f_dim = -1 if self.args.features == 'MS' else 0
                     mu = mu[:, -self.args.pred_len:, f_dim:]
-                    std = std[:, -self.args.pred_len:, f_dim:]
+                    var = var[:, -self.args.pred_len:, f_dim:]
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
-                    #loss = criterion(mu, batch_y, std **2)
-                    loss = nn.MSELoss()(mu, batch_y)
+                    loss = criterion(mu, batch_y, var)
+                    #loss = nn.MSELoss()(mu, batch_y)
                     train_loss.append(loss.item())
                 else:
                     # encoder - decoder
@@ -266,10 +266,10 @@ class Exp_Main(Exp_Basic):
                 dec_inp = torch.zeros_like(batch_y[:, -self.args.pred_len:, :]).float()
                 dec_inp = torch.cat([batch_y[:, :self.args.label_len, :], dec_inp], dim=1).float().to(self.device)
                 if 'Stochastic' in self.args.model:
-                    mu, std = self.model(batch_x)
+                    mu, var = self.model(batch_x)
                     f_dim = -1 if self.args.features == 'MS' else 0
                     mu = mu[:, -self.args.pred_len:, f_dim:].detach().cpu()
-                    std = std[:, -self.args.pred_len:, f_dim:].detach().cpu()
+                    var = var[:, -self.args.pred_len:, f_dim:].detach().cpu()
 
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
                     true = batch_y.detach().cpu()
