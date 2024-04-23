@@ -72,7 +72,7 @@ class Model(nn.Module):
             self.Linear_Trend = nn.Linear(self.seq_len,self.pred_len)
             #self.Linear_Seasonal_Var = nn.Linear(self.seq_len,self.pred_len)
             #self.Linear_Trend_Var = nn.Linear(self.seq_len,self.pred_len)
-            self.Linear_Seasonal_var = nn.Sequential(
+            self.Linear_Seasonal_Var = nn.Sequential(
                 nn.Linear(self.seq_len,self.pred_len),
                 nn.Softplus())
             self.Linear_Trend_Var = nn.Sequential(
@@ -95,13 +95,13 @@ class Model(nn.Module):
             for i in range(self.channels):
                 seasonal_output[:,i,:] = self.Linear_Seasonal[i](seasonal_init[:,i,:])
                 trend_output[:,i,:] = self.Linear_Trend[i](trend_init[:,i,:])
-                seasonal_var[:,i,:] = self.Linear_Seasonal_Std[i](seasonal_init[:,i,:])
-                trend_var[:,i,:] = self.Linear_Trend_Std[i](trend_init[:,i,:])
+                seasonal_var[:,i,:] = self.Linear_Seasonal_Var[i](seasonal_init[:,i,:])
+                trend_var[:,i,:] = self.Linear_Trend_Var[i](trend_init[:,i,:])
         else:
             seasonal_output = self.Linear_Seasonal(seasonal_init)
             trend_output = self.Linear_Trend(trend_init)
-            seasonal_var = self.Linear_Seasonal_Std(seasonal_init)
-            trend_var = self.Linear_Trend_Std(trend_init)
+            seasonal_var = self.Linear_Seasonal_Var(seasonal_init)
+            trend_var = self.Linear_Trend_Var(trend_init)
 
         x = seasonal_output + trend_output
         var = seasonal_var + trend_var
