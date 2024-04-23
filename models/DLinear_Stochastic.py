@@ -53,23 +53,31 @@ class Model(nn.Module):
         if self.individual:
             self.Linear_Seasonal = nn.ModuleList()
             self.Linear_Trend = nn.ModuleList()
-            self.Linear_Seasonal_Std = nn.ModuleList()
-            self.Linear_Trend_Std = nn.ModuleList()
+            self.Linear_Seasonal_Var = nn.ModuleList()
+            self.Linear_Trend_Var = nn.ModuleList()
             
             for i in range(self.channels):
                 self.Linear_Seasonal.append(nn.Linear(self.seq_len,self.pred_len))
                 self.Linear_Trend.append(nn.Linear(self.seq_len,self.pred_len))
-                self.Linear_Seasonal_Std.append(nn.Linear(self.seq_len,self.pred_len))
-                self.Linear_Trend_Std.append(nn.Linear(self.seq_len,self.pred_len))
+                self.Linear_Seasonal_Var.append(nn.Linear(self.seq_len,self.pred_len))
+                self.Linear_Trend_Var.append(nn.Linear(self.seq_len,self.pred_len))
 
                 # Use this two lines if you want to visualize the weights
                 # self.Linear_Seasonal[i].weight = nn.Parameter((1/self.seq_len)*torch.ones([self.pred_len,self.seq_len]))
                 # self.Linear_Trend[i].weight = nn.Parameter((1/self.seq_len)*torch.ones([self.pred_len,self.seq_len]))
+            self.Linear_Seasonal_Var.append(nn.Softplus())
+            self.Linear_Trend_Var.append(nn.Softplus())
         else:
             self.Linear_Seasonal = nn.Linear(self.seq_len,self.pred_len)
             self.Linear_Trend = nn.Linear(self.seq_len,self.pred_len)
-            self.Linear_Seasonal_Std = nn.Linear(self.seq_len,self.pred_len)
-            self.Linear_Trend_Std = nn.Linear(self.seq_len,self.pred_len)
+            #self.Linear_Seasonal_Var = nn.Linear(self.seq_len,self.pred_len)
+            #self.Linear_Trend_Var = nn.Linear(self.seq_len,self.pred_len)
+            self.Linear_Seasonal_var = nn.Sequential(
+                nn.Linear(self.seq_len,self.pred_len),
+                nn.Softplus())
+            self.Linear_Trend_Var = nn.Sequential(
+                nn.Linear(self.seq_len,self.pred_len),
+                nn.Softplus())
             
             # Use this two lines if you want to visualize the weights
             # self.Linear_Seasonal.weight = nn.Parameter((1/self.seq_len)*torch.ones([self.pred_len,self.seq_len]))
@@ -82,19 +90,19 @@ class Model(nn.Module):
         if self.individual:
             seasonal_output = torch.zeros([seasonal_init.size(0),seasonal_init.size(1),self.pred_len],dtype=seasonal_init.dtype).to(seasonal_init.device)
             trend_output = torch.zeros([trend_init.size(0),trend_init.size(1),self.pred_len],dtype=trend_init.dtype).to(trend_init.device)
-            seasonal_std = torch.zeros([seasonal_init.size(0),seasonal_init.size(1),self.pred_len],dtype=seasonal_init.dtype).to(seasonal_init.device)
-            trend_std = torch.zeros([trend_init.size(0),trend_init.size(1),self.pred_len],dtype=trend_init.dtype).to(trend_init.device)
+            seasonal_var = torch.zeros([seasonal_init.size(0),seasonal_init.size(1),self.pred_len],dtype=seasonal_init.dtype).to(seasonal_init.device)
+            trend_var = torch.zeros([trend_init.size(0),trend_init.size(1),self.pred_len],dtype=trend_init.dtype).to(trend_init.device)
             for i in range(self.channels):
                 seasonal_output[:,i,:] = self.Linear_Seasonal[i](seasonal_init[:,i,:])
                 trend_output[:,i,:] = self.Linear_Trend[i](trend_init[:,i,:])
-                seasonal_std[:,i,:] = self.Linear_Seasonal_Std[i](seasonal_init[:,i,:])
-                trend_std[:,i,:] = self.Linear_Trend_Std[i](trend_init[:,i,:])
+                seasonal_var[:,i,:] = self.Linear_Seasonal_Std[i](seasonal_init[:,i,:])
+                trend_var[:,i,:] = self.Linear_Trend_Std[i](trend_init[:,i,:])
         else:
             seasonal_output = self.Linear_Seasonal(seasonal_init)
             trend_output = self.Linear_Trend(trend_init)
-            seasonal_std = self.Linear_Seasonal_Std(seasonal_init)
-            trend_std = self.Linear_Trend_Std(trend_init)
+            seasonal_var = self.Linear_Seasonal_Std(seasonal_init)
+            trend_var = self.Linear_Trend_Std(trend_init)
 
         x = seasonal_output + trend_output
-        std = seasonal_std + trend_std
-        return x.permute(0,2,1), std.permute(0,2,1) # to [Batch, Output length, Channel]
+        var = seasonal_var + trend_var
+        return x.permute(0,2,1), var.permute(0,2,1) # to [Batch, Output length, Channel]
