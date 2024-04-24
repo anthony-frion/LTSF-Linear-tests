@@ -313,7 +313,7 @@ class Exp_Main(Exp_Basic):
                     gt = np.concatenate((input[0, :, -1], true[0, :, -1]), axis=0)
                     pd = np.concatenate((input[0, :, -1], pred[0, :, -1]), axis=0)
                     if 'Stochastic' in self.args.model:
-                        std = np.sqrt(var[0, :, -1])
+                        std = np.sqrt(var[0, :, -1].numpy())
                         visual_stochastic(gt, pd, std, os.path.join(folder_path, str(i) + '.pdf'))
                     else:
                         visual(gt, pd, os.path.join(folder_path, str(i) + '.pdf'))
