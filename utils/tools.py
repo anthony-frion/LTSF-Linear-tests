@@ -92,6 +92,18 @@ def visual(true, preds=None, name='./pic/test.pdf'):
     plt.legend()
     plt.savefig(name, bbox_inches='tight')
 
+def visual_stochastic(true, preds, stds, name='./pic/test.pdf'):
+    """
+    Results visualization for stochastic models
+    """
+    plt.figure()
+    plt.plot(true, label='GroundTruth', c='blue', linewidth=2)
+    plt.plot(preds, label='Prediction', c='orange', linewidth=2)
+    plt.plot(preds - stds, c='orange', linestyle=':')
+    plt.plot(preds + stds, c='orange', linestyle=':')
+    plt.legend()
+    plt.savefig(name, bbox_inches='tight')
+
 def test_params_flop(model,x_shape):
     """
     If you want to thest former's flop, you need to give default value to inputs in model.forward(), the following code can only pass one argument to forward()
