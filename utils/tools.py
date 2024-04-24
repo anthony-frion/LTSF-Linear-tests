@@ -98,9 +98,10 @@ def visual_stochastic(true, preds, stds, name='./pic/test.pdf'):
     """
     plt.figure()
     plt.plot(true, label='GroundTruth', c='blue', linewidth=2)
-    plt.plot(preds, label='Prediction', c='orange', linewidth=2)
+    plt.plot(preds, label='Mean prediction', c='orange', linewidth=2)
     plt.plot([i for i in range(preds.shape[0] - stds.shape[0], preds.shape[0])], preds[-stds.shape[0]:] - stds, c='orange', linestyle=':')
     plt.plot([i for i in range(preds.shape[0] - stds.shape[0], preds.shape[0])], preds[-stds.shape[0]:] + stds, c='orange', linestyle=':')
+    plt.plot([], c='orange, linestyle=':', label='Mean prediction +/- 1 std')
     plt.legend()
     plt.savefig(name, bbox_inches='tight')
 
