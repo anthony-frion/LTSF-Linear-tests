@@ -150,6 +150,7 @@ else:
     args_path = './args/' + setting + '/'
     if not os.path.exists(args_path):
       os.makedirs(args_path)
+      print(f'Path {args_path} created.')
     with open(args_path + 'args.txt', 'w') as f:
       json.dump(args.__dict__, f, indent=2)
     exp = Exp(args)  # set experiments
