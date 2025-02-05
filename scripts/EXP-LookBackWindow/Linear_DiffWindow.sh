@@ -2,8 +2,8 @@ if [ ! -d "./logs" ]; then
     mkdir ./logs
 fi
 
-if [ ! -d "./logs/LoookBackWindow" ]; then
-    mkdir ./logs/LoookBackWindow
+if [ ! -d "./logs/LookBackWindow" ]; then
+    mkdir ./logs/LookBackWindow
 fi
 
 model_name=DLinear
