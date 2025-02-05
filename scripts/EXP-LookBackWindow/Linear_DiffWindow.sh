@@ -1,3 +1,10 @@
+if [ ! -d "./logs" ]; then
+    mkdir ./logs
+fi
+
+if [ ! -d "./logs/LoookBackWindow" ]; then
+    mkdir ./logs/LoookBackWindow
+
 model_name=DLinear
 
 for pred_len in 24 720
