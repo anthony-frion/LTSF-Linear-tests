@@ -4,6 +4,7 @@ fi
 
 if [ ! -d "./logs/LoookBackWindow" ]; then
     mkdir ./logs/LoookBackWindow
+fi
 
 model_name=DLinear
 
