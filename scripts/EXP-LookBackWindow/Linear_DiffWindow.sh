@@ -9,7 +9,7 @@ fi
 model_name=DLinear
 pred_len=720
 
-for seq_len in 48 72 96 120 144 168 192 336 504 672 720
+for seq_len in 24 48 72 96 120 144 168 192 336 504 672 720
 do
    python -u run_longExp.py \
     --is_training 1 \
