@@ -9,6 +9,18 @@ data_dict = {
     'custom': Dataset_Custom,
 }
 
+class DatasetWrapper(Dataset):
+    def __init__(self, original_dataset, offset):
+        self.original_dataset = original_dataset
+        self.offset = offset
+
+    def __len__(self):
+        # Return the number of samples excluding the first offset
+        return len(self.original_dataset) - self.offset
+
+    def __getitem__(self, idx):
+        # Offset index by offset to skip the first offset samples
+        return self.original_dataset[idx + self.offset]
 
 def data_provider(args, flag):
     Data = data_dict[args.data]
@@ -43,6 +55,8 @@ def data_provider(args, flag):
         freq=freq,
         train_only=train_only
     )
+    if args.seq_len < 48:
+      data_set = DatasetWrapper(data_set, 48 - args.seq_len)
     print(flag, len(data_set))
     data_loader = DataLoader(
         data_set,
