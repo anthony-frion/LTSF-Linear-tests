@@ -15,7 +15,7 @@ do
       --is_training 1 \
       --root_path ./dataset/ \
       --data_path electricity.csv \
-      --model_id electricity_96_$pred_len \
+      --model_id electricity_$seq_len_$pred_len \
       --model $model_name \
       --data custom \
       --features M \
