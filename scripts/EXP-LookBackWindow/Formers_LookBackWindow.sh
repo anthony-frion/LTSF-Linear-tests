@@ -19,7 +19,7 @@ do
       --model $model_name \
       --data custom \
       --features M \
-      --seq_len 96 \
+      --seq_len $seq_len \
       --label_len 48 \
       --pred_len $pred_len \
       --e_layers 2 \
