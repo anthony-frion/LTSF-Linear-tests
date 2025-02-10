@@ -5,7 +5,7 @@ fi
 if [ ! -d "./logs/LookBackWindow" ]; then
     mkdir ./logs/LookBackWindow
 fi
-pred_len = 720
+pred_len=720
 
 for model_name in Autoformer Informer Transformer
 do
