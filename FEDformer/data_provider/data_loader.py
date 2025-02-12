@@ -221,6 +221,8 @@ class Dataset_Custom(Dataset):
     def __read_data__(self):
         print(f"Le pwd de tes morts : {os.getcwd()}")
         print(f"La cible de tes morts : {os.path.join(self.root_path, self.data_path)}")
+        !echo f"Le pwd de tes morts : {os.getcwd()}"
+        !echo f"La cible de tes morts : {os.path.join(self.root_path, self.data_path)}"
         self.scaler = StandardScaler()
         df_raw = pd.read_csv(os.path.join(self.root_path,
                                           self.data_path))
