@@ -216,6 +216,8 @@ class Dataset_Custom(Dataset):
         self.freq = freq
 
         self.root_path = root_path
+        if self.root_path[:3] == "...":
+            self.root_path = self.root_path[1:]
         self.data_path = data_path
         self.__read_data__()
 
