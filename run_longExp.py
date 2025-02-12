@@ -18,7 +18,18 @@ parser.add_argument('--is_training', type=int, required=True, default=1, help='s
 parser.add_argument('--train_only', type=bool, required=False, default=False, help='perform training on full input dataset without validation and testing')
 parser.add_argument('--model_id', type=str, required=True, default='test', help='model id')
 parser.add_argument('--model', type=str, required=True, default='Autoformer',
-                    help='model name, options: [Autoformer, Informer, Transformer]')
+                    help='model name, options: [FEDformer, Autoformer, Informer, Transformer]')
+
+# supplementary config for FEDformer model
+parser.add_argument('--version', type=str, default='Fourier',
+                    help='for FEDformer, there are two versions to choose, options: [Fourier, Wavelets]')
+parser.add_argument('--mode_select', type=str, default='random',
+                    help='for FEDformer, there are two mode selection method, options: [random, low]')
+parser.add_argument('--modes', type=int, default=64, help='modes to be selected random 64')
+parser.add_argument('--L', type=int, default=3, help='ignore level')
+parser.add_argument('--base', type=str, default='legendre', help='mwt base')
+parser.add_argument('--cross_activation', type=str, default='tanh',
+                    help='mwt cross atention activation function tanh or softmax')
 
 # data loader
 parser.add_argument('--data', type=str, required=True, default='ETTm1', help='dataset type')
