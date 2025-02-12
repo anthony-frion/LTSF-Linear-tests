@@ -231,9 +231,9 @@ class Dataset_Custom(Dataset):
         subprocess.run(["echo", echo1])
         subprocess.run(["echo", echo2])
         self.scaler = StandardScaler()
-        df_raw = pd.read_csv(os.path.join(self.root_path,
-                                          self.data_path))
-
+        #df_raw = pd.read_csv(os.path.join(self.root_path,
+        #                                  self.data_path))
+        df_raw = pd.read_csv("/content/LTSF-Linear-Tests/dataset/electricity/csv)
         '''
         df_raw.columns: ['date', ...(other features), target feature]
         '''
