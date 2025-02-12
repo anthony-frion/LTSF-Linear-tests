@@ -25,7 +25,7 @@ class Exp_Main(Exp_Basic):
 
     def _build_model(self):
         model_dict = {
-            'FEDformer': FEDformer
+            'FEDformer': FEDformer,
             'Autoformer': Autoformer,
             'Transformer': Transformer,
             'Informer': Informer,
