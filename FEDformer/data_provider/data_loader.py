@@ -7,6 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import StandardScaler
 from utils.timefeatures import time_features
 import warnings
+import subprocess
 
 warnings.filterwarnings('ignore')
 
@@ -223,9 +224,12 @@ class Dataset_Custom(Dataset):
         print(f"La cible de tes morts : {os.path.join(self.root_path, self.data_path)}")
         echo1 = f"Le pwd de tes morts : {os.getcwd()}"
         echo2 = f"La cible de tes morts : {os.path.join(self.root_path, self.data_path)}"
-        !echo "chemins de tes morts :"
-        !echo {os.getcwd()}
-        !echo {os.path.join(self.root_path, self.data_path)}
+        #!echo "chemins de tes morts :"
+        #!echo {os.getcwd()}
+        #!echo {os.path.join(self.root_path, self.data_path)}
+        subprocess.run(["echo", "tes grands morts"]
+        subprocess.run(["echo", echo1]
+        subprocess.run(["echo", echo2]
         self.scaler = StandardScaler()
         df_raw = pd.read_csv(os.path.join(self.root_path,
                                           self.data_path))
