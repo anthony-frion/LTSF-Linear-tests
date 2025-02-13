@@ -28,6 +28,7 @@ python -u run.py \
  --enc_in 321 \
  --dec_in 321 \
  --c_out 321 \
+ --learning_rate 0.00005 \
  --des 'Exp' \
  --itr 1 >../logs/LookBackWindow/FEDformer_electricity_$seqLen'_'$pred_len.log
 done
