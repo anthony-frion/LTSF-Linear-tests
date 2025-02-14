@@ -8,7 +8,7 @@ if [ ! -d "../logs/LookBackWindow" ]; then
 fi
 
 pred_len=720
-for seqLen in 192 336 504 672 720
+for seqLen in 504 672 720
 do
 ## electricity
 python -u run.py \
